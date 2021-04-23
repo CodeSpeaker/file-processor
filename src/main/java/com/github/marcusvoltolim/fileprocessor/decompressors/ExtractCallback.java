@@ -41,7 +41,7 @@ public class ExtractCallback implements IArchiveExtractCallback {
             return null;
         }
 
-        final String fileName = FilenameUtils.getName((String) inArchive.getProperty(index, PropID.PATH));
+        final String fileName = (String) inArchive.getProperty(index, PropID.PATH);
         return data -> {
             hash ^= Arrays.hashCode(data);
             size += data.length;

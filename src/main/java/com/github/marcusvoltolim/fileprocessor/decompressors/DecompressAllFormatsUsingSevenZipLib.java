@@ -36,6 +36,7 @@ public class DecompressAllFormatsUsingSevenZipLib extends AbstractDecompress {
         extract.forEach((fileName, bytes) -> {
             final Path path = Paths.get(dirTempOut.getAbsolutePath(), fileName);
             try {
+                Files.createDirectories(path.getParent());
                 Files.write(path, bytes);
             } catch (IOException e) {
                 log.severe(e.getMessage());
