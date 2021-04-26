@@ -45,7 +45,11 @@ public class ExtractCallback implements IArchiveExtractCallback {
         return data -> {
             hash ^= Arrays.hashCode(data);
             size += data.length;
-            filesExtracteds.put(fileName, data);
+            byte[] oldBytes = filesExtracteds.computeIfAbsent(fileName, name -> new byte[0]);
+            byte[] newBytes = new byte[oldBytes.length + data.length];
+            System.arraycopy(oldBytes, 0, newBytes, 0, oldBytes.length);
+            System.arraycopy(data, 0, newBytes, oldBytes.length, data.length);
+            filesExtracteds.put(fileName, newBytes);
             return data.length;
         };
     }
