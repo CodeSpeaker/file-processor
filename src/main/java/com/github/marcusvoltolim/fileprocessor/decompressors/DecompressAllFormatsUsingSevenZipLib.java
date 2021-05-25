@@ -29,7 +29,9 @@ public class DecompressAllFormatsUsingSevenZipLib extends AbstractDecompress {
     public File decompress(InputStream inputStream) throws IOException {
         final File dirTempOut = getTempDir();
         final File tempFile = getTempFile(dirTempOut, "");
-        IOUtils.copy(inputStream, new FileOutputStream(tempFile));
+        try (FileOutputStream output = new FileOutputStream(tempFile)) {
+            IOUtils.copy(inputStream, output);
+        }
 
         final Map<String, byte[]> extract = ExtractItemsStandardCallback.extract(tempFile, ignoreFolder);
 
@@ -42,7 +44,7 @@ public class DecompressAllFormatsUsingSevenZipLib extends AbstractDecompress {
                 log.severe(e.getMessage());
             }
         });
-
+        Files.delete(tempFile.toPath());
         return dirTempOut;
     }
 
